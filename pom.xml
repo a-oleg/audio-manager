@@ -32,14 +32,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
+			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
 
 		<dependency>
@@ -49,10 +42,56 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>RELEASE</version>
+			<scope>compile</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>2.4.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.openapitools</groupId>
+			<artifactId>jackson-databind-nullable</artifactId>
+			<version>0.2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.1.0.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.2.0.Final</version>
+			<scope>compile</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -60,29 +99,44 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-				<executions>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.openapitools</groupId> <!-- Группа, к которой принадлежит плагин -->
+				<artifactId>openapi-generator-maven-plugin</artifactId> <!-- Идентификатор артефакта плагина -->
+				<version>7.0.1</version> <!-- Версия плагина -->
+
+				<executions> <!-- Набор задач, которые будут выполнены -->
 					<execution>
-						<goals>
-							<goal>repackage</goal>
+						<goals> <!-- Цели (goal) задачи -->
+							<goal>generate</goal> <!-- Цель - сгенерировать код -->
 						</goals>
+
+						<configuration> <!-- Конфигурация для выполнения задачи -->
+							<inputSpec>${project.basedir}/src/main/resources/openapispecification.yaml
+							</inputSpec> <!-- Путь к файлу спецификации API -->
+							<importMappings>ApiUtil=aoleg.com.github.audiomanager.ApiUtil</importMappings>
+							<importMappings>AudiofilesApiController=aoleg.com.github.audiomanager.AudiofilesApiController
+							</importMappings>
+							<generatorName>spring
+							</generatorName> <!-- Наименование генератора (в данном случае, Spring) -->
+							<ignoreFileOverride>.openapi-generator-ignore</ignoreFileOverride>
+							<apiPackage>aoleg.com.github.audiomanager.api
+							</apiPackage> <!-- Пакет для сгенерированных API классов -->
+							<modelPackage>aoleg.com.github.audiomanager.model
+							</modelPackage> <!-- Пакет для сгенерированных модельных классов -->
+							<!--							<supportingFilesToGenerate> &lt;!&ndash; Файлы, которые нужно сгенерировать &ndash;&gt;-->
+							<!--								ApiUtil.java-->
+							<!--							</supportingFilesToGenerate>-->
+							<configOptions> <!-- Опции конфигурации -->
+								<!--								<delegatePattern>true</delegatePattern> &lt;!&ndash; Использовать ли делегатный паттерн &ndash;&gt;-->
+								<interfaceOnly>true</interfaceOnly>
+								<skipDefaultInterface>true</skipDefaultInterface>
+							</configOptions>
+						</configuration>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.12.1</version>
-				<configuration>
-					<parameters>true</parameters>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
